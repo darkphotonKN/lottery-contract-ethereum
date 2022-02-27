@@ -5,10 +5,9 @@ pragma solidity ^0.4.17;
 contract Lottery {
     address public manager;
     address[] public players;
-    uint public MINIMUM_PAYMENT = 0.01 ether;
+    uint public MINIMUM_PAYMENT = 0.001 ether; // cannot be under 1 wei or it WILL NOT COMPILE
 
-
-    constructor() public{
+    constructor() public {
         manager = msg.sender; // sets
     }
 
@@ -18,12 +17,10 @@ contract Lottery {
         require(msg.value > MINIMUM_PAYMENT);
         // everyone that enters the lottery they have to send in some ether
         players.push(msg.sender); // using the global "msg" object that is automatically created when someone invokes the function
-
     }
 
     function randomGen() public view returns (uint) {
         return uint(keccak256(block.difficulty, now, players)); // converts data passed in into hash
-
     }
 
     function pickWinner() public restrictedToManager {
@@ -31,7 +28,6 @@ contract Lottery {
         players[winnerIndex].transfer(this.balance); // find that winner in our players array and transfer current instance's balance
         // creates a brand new dynamic array of type address to reset the lottery after picking a winner
         players = new address[](0); // (0) sets initial size of 0
-        
     }
 
     modifier restrictedToManager() {
@@ -46,40 +42,37 @@ contract Lottery {
     }
 }
 
-/*
-pragma solidity ^0.4.17;
 
-contract Lottery {
-    address public manager;
-    address[] public players;
+// contract Lottery {
+//     address public manager;
+//     address[] public players;
     
-    function Lottery() public {
-        manager = msg.sender;
-    }
+//     function Lottery() public {
+//         manager = msg.sender;
+//     }
     
-    function enter() public payable {
-        require(msg.value > .01 ether);
-        players.push(msg.sender);
-    }
+//     function enter() public payable {
+//         require(msg.value > .01 ether);
+//         players.push(msg.sender);
+//     }
     
-    function random() private view returns (uint) {
-        return uint(keccak256(block.difficulty, now, players));
-    }
+//     function random() private view returns (uint) {
+//         return uint(keccak256(block.difficulty, now, players));
+//     }
     
-    function pickWinner() public restricted {
-        uint index = random() % players.length;
-        players[index].transfer(this.balance);
-        players = new address[](0);
-    }
+//     function pickWinner() public restricted {
+//         uint index = random() % players.length;
+//         players[index].transfer(this.balance);
+//         players = new address[](0);
+//     }
     
-    modifier restricted() {
-        require(msg.sender == manager);
-        _;
-    }
+//     modifier restricted() {
+//         require(msg.sender == manager);
+//         _;
+//     }
     
-    function getPlayers() public view returns (address[]) {
-        return players;
-    }
-}   
+//     function getPlayers() public view returns (address[]) {
+//         return players;
+//     }
+// }   
 
-*/
