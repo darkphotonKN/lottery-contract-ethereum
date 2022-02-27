@@ -92,7 +92,6 @@ describe('Lottery Contract', () => {
 
     // get final balance of account after winner is picked
     const finalBalance = await web3.eth.getBalance(accounts[0]);
-    console.log('finalBalance', finalBalance);
 
     // compare the balance before and after
     const difference = finalBalance - initialBalance;

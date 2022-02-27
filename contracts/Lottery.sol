@@ -28,6 +28,7 @@ contract Lottery {
         players[winnerIndex].transfer(this.balance); // find that winner in our players array and transfer current instance's balance
         // creates a brand new dynamic array of type address to reset the lottery after picking a winner
         players = new address[](0); // (0) sets initial size of 0
+
     }
 
     modifier restrictedToManager() {
@@ -41,38 +42,4 @@ contract Lottery {
         return players;
     }
 }
-
-
-// contract Lottery {
-//     address public manager;
-//     address[] public players;
-    
-//     function Lottery() public {
-//         manager = msg.sender;
-//     }
-    
-//     function enter() public payable {
-//         require(msg.value > .01 ether);
-//         players.push(msg.sender);
-//     }
-    
-//     function random() private view returns (uint) {
-//         return uint(keccak256(block.difficulty, now, players));
-//     }
-    
-//     function pickWinner() public restricted {
-//         uint index = random() % players.length;
-//         players[index].transfer(this.balance);
-//         players = new address[](0);
-//     }
-    
-//     modifier restricted() {
-//         require(msg.sender == manager);
-//         _;
-//     }
-    
-//     function getPlayers() public view returns (address[]) {
-//         return players;
-//     }
-// }   
 
