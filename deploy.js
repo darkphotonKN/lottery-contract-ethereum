@@ -3,10 +3,8 @@ const Web3 = require('web3');
 const { interface, bytecode } = require('./compile');
 
 const provider = new HDWalletProvider(
-  'REPLACE_WITH_YOUR_MNEMONIC',
-  // remember to change this to your own phrase!
+  'word frozen question gown hamster place skin pizza tragic then skin figure',
   'https://rinkeby.infura.io/v3/15c1d32581894b88a92d8d9e519e476c'
-  // remember to change this to your own endpoint!
 );
 const web3 = new Web3(provider);
 
@@ -19,6 +17,7 @@ const deploy = async () => {
     .deploy({ data: bytecode })
     .send({ gas: '1000000', from: accounts[0] });
 
+  console.log('inteface (abi)', interface); // interface used as the abi for the bridge between solidity and javascript
   console.log('Contract deployed to', result.options.address);
   provider.engine.stop();
 };

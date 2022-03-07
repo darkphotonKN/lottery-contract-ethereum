@@ -5,6 +5,7 @@ pragma solidity ^0.4.17;
 contract Lottery {
     address public manager;
     address[] public players;
+    address public winner;
     uint public MINIMUM_PAYMENT = 0.001 ether; // cannot be under 1 wei or it WILL NOT COMPILE
 
     constructor() public {
@@ -12,7 +13,7 @@ contract Lottery {
     }
 
     // when someone enters the lottery
-    function enter() public payable {
+    function enter() public payable {        
         // prevent someone sending along less than minimum required ether to join
         require(msg.value > MINIMUM_PAYMENT);
         // everyone that enters the lottery they have to send in some ether
@@ -26,6 +27,8 @@ contract Lottery {
     function pickWinner() public restrictedToManager {
         uint winnerIndex = randomGen() % players.length; // find a random winner index for the players array
         players[winnerIndex].transfer(this.balance); // find that winner in our players array and transfer current instance's balance
+        // set winner for client side to view winner
+        winner = players[winnerIndex];
         // creates a brand new dynamic array of type address to reset the lottery after picking a winner
         players = new address[](0); // (0) sets initial size of 0
 

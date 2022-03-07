@@ -97,4 +97,25 @@ describe('Lottery Contract', () => {
     const difference = finalBalance - initialBalance;
     assert(difference > web3.utils.toWei('1.8', 'ether')); // not using 2 to allow for some gas cost
   });
+
+  // be able to get winner
+  it('reveals winner chosen', async () => {
+    await lottery.methods
+      .enter()
+      .send({ from: accounts[0], value: web3.utils.toWei('0.002', 'ether') });
+    await lottery.methods
+      .enter()
+      .send({ from: accounts[1], value: web3.utils.toWei('0.004', 'ether') });
+    await lottery.methods
+      .enter()
+      .send({ from: accounts[2], value: web3.utils.toWei('0.007', 'ether') });
+
+    // pick winner
+    await lottery.methods.pickWinner().send({ from: accounts[0] });
+
+    // then check who won
+    const winner = await lottery.methods.winner().call({ from: accounts[0] });
+
+    console.log('winner:', winner);
+  });
 });
